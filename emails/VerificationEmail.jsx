@@ -36,8 +36,8 @@ const VerificationEmail = ({
           <Container className="my-10 mx-auto p-5 w-[465px]">
             <Section className="mt-8">
               <Img
-                // src={`https://i.imgur.com/gxZjACW.png`}
-                src="cid:uniq-SRS.png"
+                src={`https://i.imgur.com/ZofumKm.png`}
+                // src="cid:uniq-SRS.png"
                 width="140"
                 height="140"
                 alt="Logo"

@@ -21,19 +21,23 @@ export async function sendVerificationEmail(
     });
     const emailHtml = render(VerificationEmail({ username, email, otp: verifyCode }))
 
-    const result = await transporter.sendMail({
-      from: '"Blueprint.AI" <contact.akshat.jaiswal@gmail.com>', 
-      to: email,
-      subject: "Verification Code | Blueprint.AI", 
-      html:  emailHtml,
-      attachments: [
-        {
-          filename: "SRS.png",
-          path: `${process.env.NEXT_PUBLIC_URL}/SRS.png`,
-          cid: "uniq-SRS.png",
-        },
-      ],
-    });
+    const sendMessage = async()=>{
+      await transporter.sendMail({
+        from: '"Blueprint.AI" <contact.akshat.jaiswal@gmail.com>', 
+        to: email,
+        subject: "Verification Code | Blueprint.AI", 
+        html:  emailHtml,
+        // attachments: [
+        //   {
+        //     filename: "SRS.png",
+        //     path: `${process.env.NEXT_PUBLIC_URL}/SRS.png`,
+        //     cid: "uniq-SRS.png",
+        //   },
+        // ],
+      });
+    }
+    await sendMessage();
+
     // resend.emails.send({
     //   from: "onboarding@resend.dev",
     //   to: email,
