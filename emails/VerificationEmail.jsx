@@ -64,8 +64,6 @@ const VerificationEmail = ({
             </Text>
             <Section className="text-center mt-[32px] mb-[32px]">
               <Button
-                pX={20}
-                pY={12}
                 className="bg-[#00A3FF] py-2 px-5 rounded text-white text-xs font-semibold no-underline text-center"
                 href={`${baseUrl}/verify/${email}`}
               >

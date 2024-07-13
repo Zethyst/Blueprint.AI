@@ -74,7 +74,6 @@ import {
     try {
       const response = await axios.post<APIResponse>("/api/sign-up", data);
       toast({
-        variant:"success",
         title: "Success",
         description: response.data.message,
       });
