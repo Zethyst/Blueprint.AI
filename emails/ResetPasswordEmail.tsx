@@ -34,8 +34,8 @@ export const ResetPasswordEmail = ({
       <Body style={main}>
         <Container style={container}>
           <Img
-            // src={`https://i.imgur.com/gxZjACW.png`}
-            src="cid:uniq-SRS.png"
+            src={`https://i.imgur.com/ZofumKm.png`}
+            // src="cid:uniq-SRS.png"
             width="140"
             height="140"
             alt="Logo"

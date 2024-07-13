@@ -20,19 +20,22 @@ export async function sendResetPasswordConfirmmail(
     });
     const emailHtml = render(ResetPasswordConfirmEmail({ username, updatedDate}))
 
+    const sendMessage = async()=>{
     const result = await transporter.sendMail({
       from: '"Blueprint.AI" <contact.akshat.jaiswal@gmail.com>', 
       to: email,
       subject: "You updated the password for your Blueprint.AI account", 
       html:  emailHtml,
-      attachments: [
-        {
-          filename: "SRS.png",
-          path: `${process.env.NEXT_PUBLIC_BASE_URL}/SRS.png`,
-          cid: "uniq-SRS.png",
-        },
-      ],
+      // attachments: [
+      //   {
+      //     filename: "SRS.png",
+      //     path: `${process.env.NEXT_PUBLIC_URL}/SRS.png`,
+      //     cid: "uniq-SRS.png",
+      //   },
+      // ],
     });
+  }
+  await sendMessage();
 
     return { success: true, message: "Reset Password Confirm Email Sent Successfully" };
   } catch (error) {

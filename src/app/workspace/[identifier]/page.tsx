@@ -121,9 +121,9 @@ function Page() {
       <div className="color"></div>
       <div className="color"></div>
       <div className="overflow-hidden w-[25rem] md:w-[50rem] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] shadow-md rounded-3xl mt-4 flex flex-col justify-center items-center">
-        <div className="h-[50%] bg-[#00000046] glass w-full p-14 flex flex-col gap-8 justify-center items-center">
+        <div className="h-[50%] bg-[#00000046] glass w-full p-14 flex flex-col gap-20 justify-center items-center">
           {status == "authenticated" ? (
-            <div>
+            <div className=" flex flex-col gap-8 justify-center items-center">
               <p
                 style={{ fontFamily: " 'Cinzel Variable', serif" }}
                 className="text-3xl md:text-4xl text-center tracking-wider font-medium text-white  font-gradient"

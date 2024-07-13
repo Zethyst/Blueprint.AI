@@ -61,21 +61,29 @@ export default function Component() {
     <>
       {session ? (
         <>
-          <section className="">
-            <div className="color"></div>
-            <div className="color"></div>
-            <div className=" overflow-hidden absolute shadow-md rounded-3xl max-w-screen-sm w-80 md:w-96 m-auto mt-4 flex flex-col justify-center items-center">
-              <div className="h-[50%] bg-[#00000011] glass w-full p-10 flex flex-col gap-8 justify-center items-center">
+        <section className="flex justify-center items-center min-h-[90vh] overflow-hidden">
+          <div className="login-container relative w-[22.2rem] ">
+            <div
+              className="absolute w-32 h-32 bg-[#0F3460] rounded-full top-0 left-0  animate-animate-1"
+              style={{ "--i": 0 } as React.CSSProperties}
+            ></div>
+            <div className=" overflow-hidden absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] shadow-md rounded-3xl max-w-screen-sm w-80 md:w-96 m-auto mt-4 flex flex-col justify-center items-center">
+              <div className="h-[50%] bg-[#0000001f] glass w-full p-10 flex flex-col gap-8 justify-center items-center">
                 <p className="text-center text-gray-300">
-                  Signed in as {session.user.email}
+                  Signed in as <span className="cool-text">{session?.user.email}</span>
                 </p>
                 <button
                   onClick={() => signOut()}
-                  className={` btn h-12 w-48 bg-[#00000097] hover:scale-105 transition-all duration-200 flex justify-center items-center translate-y-3  uppercase text-center font-semibold text-white rounded-2xl`}
+                  className={` btn h-12 w-48 bg-gray-400 text-black hover:scale-105 transition-all duration-200 flex justify-center items-center translate-y-3  uppercase text-center font-bold rounded-2xl`}
                 >
                   Sign Out
                 </button>
               </div>
+            </div>
+                        <div
+              className="absolute w-32 h-32 bg-[#0f3460] rounded-full bottom-0 right-0 z-[-1] animate-animate-2"
+              style={{ "--i": 1 } as React.CSSProperties}
+            ></div>
             </div>
           </section>
         </>

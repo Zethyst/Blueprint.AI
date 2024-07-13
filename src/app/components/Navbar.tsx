@@ -6,8 +6,8 @@ import Link from "next/link";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
+import { usePathname } from 'next/navigation'
 import { useMenu } from "@/context/MenuContext";
-
 
 import {
   faRightFromBracket,
@@ -35,6 +35,7 @@ const Navbar: React.FC = (
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname()
 
   const { showMobileMenu, setShowMobileMenu, currentPage, setCurrentPage } = useMenu();
 
@@ -100,7 +101,7 @@ const Navbar: React.FC = (
   const user: User = session?.user as User;
   return (
     <div
-      className={`sticky  ${navbarClass} bg-[#00000055] top-0 z-50 w-full px-4 py-3 flex justify-between md:justify-around items-center gap-5 backdrop-blur-lg shadow-lg `}
+      className={`sticky  ${navbarClass} bg-[#00000055] top-0 z-50 w-full px-4 py-3 flex justify-between items-center gap-5 backdrop-blur-lg shadow-lg `}
     >
       {/* MOBILE HAMBURGER */}
   
@@ -112,12 +113,12 @@ const Navbar: React.FC = (
       <Link href="/">
         <h2
           style={{ fontFamily: "Robot" }}
-          className="text-xl tracking-widest font-semibold cursor-pointer font-gradient"
+          className="text-xl tracking-widest font-semibold cursor-pointer font-gradient md:ml-28"
         >
           Blueprint.AI
         </h2>
       </Link>
-      <ul className="hidden md:flex justify-center items-center gap-8 font-semibold mx-10">
+      <ul className={`${pathname === "/"?"md:flex":"md:hidden"} hidden justify-center items-center gap-8 font-bold -translate-x-10 `}>
         <li
           onClick={() => scrollToSection("what")}
           className={`nav-item cursor-pointer text-sm text-[#ccc]  hover:text-white`}
@@ -144,7 +145,7 @@ const Navbar: React.FC = (
         </li>
       </ul>
       {session ? (
-        <div className="relative inline-block text-left">
+        <div className="relative inline-block text-left md:mr-28">
           {/* <span className="mr-4">Welcome, {user?.username || user?.email}</span> */}
           <button
             onClick={toggleDropdown}
@@ -203,7 +204,7 @@ const Navbar: React.FC = (
         </div>
       ) : (
         <Link href="/sign-in">
-          <button className="bg-slate-800 bg-opacity-80 hover:bg-slate-900 tracking-wide text-gray-200 font-semibold px-5 py-2 flex justify-center items-center gap-3 rounded-xl">
+          <button className="bg-slate-800 bg-opacity-80 hover:bg-slate-900 tracking-wide text-gray-200 font-semibold px-5 py-2 flex justify-center items-center gap-3 rounded-xl md:mr-28">
             <FontAwesomeIcon icon={faRightToBracket} />
             <p>Login</p>
           </button>
