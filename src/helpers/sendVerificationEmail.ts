@@ -29,7 +29,7 @@ export async function sendVerificationEmail(
       attachments: [
         {
           filename: "SRS.png",
-          path: `${process.env.NEXT_PUBLIC_BASE_URL}/SRS.png`,
+          path: `${process.env.NEXT_PUBLIC_URL}/SRS.png`,
           cid: "uniq-SRS.png",
         },
       ],
