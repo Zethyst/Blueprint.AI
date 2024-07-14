@@ -2,7 +2,7 @@
 
 <p>Say goodbye to time-consuming, manual SRS writing. Blueprint.AI is your one-stop shop for streamlining software development requirements. With its user-friendly interface and powerful AI capabilities, Blueprint.AI helps you effortlessly generate comprehensive SRS documents in seconds. Whether you're starting a new project from scratch or refining an existing one, Blueprint.AI empowers you to capture all the essential details and create a clear, well-defined roadmap for your software development journey</p>
 
-[Visit Now]() 🚀
+[Visit Now](https://blueprint-ai-tau.vercel.app/) 🚀
 
 ## 🖥️ Tech Stack
 **Frontend:**
@@ -52,6 +52,92 @@
 ![user](/img/user.png)
 ![workspace](/img/workspace.png)
 ![view](/img/view.png)
+![login](/img/login.png)
+![mobile](/img/mobile.png)
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Running the Project Locally](#running-the-project-locally)
+- [Using Docker](#using-docker)
+- [License](#license)
+
+## Getting Started
+
+Before you begin, ensure you have the following installed on your local machine:
+
+- [Node.js](https://nodejs.org/) (v14 or later)
+- [npm](https://www.npmjs.com/) (v6 or later) or [Yarn](https://yarnpkg.com/) (v1 or later)
+- [Docker](https://www.docker.com/get-started)
+
+## Running the Project Locally
+
+Follow these steps to run the Next.js project on your local machine:
+
+1. **Clone the Repository:**
+
+    ```sh
+    git clone https://github.com/Zethyst/Blueprint.AI.git
+    cd Blueprint.AI
+    ```
+
+2. **Install Dependencies:**
+
+    Using npm:
+
+    ```sh
+    npm install
+    ```
+
+    Or using Yarn:
+
+    ```sh
+    yarn install
+    ```
+
+3. **Run the Development Server:**
+
+    Using npm:
+
+    ```sh
+    npm run dev
+    ```
+
+    Or using Yarn:
+
+    ```sh
+    yarn dev
+    ```
+
+4. **Open Your Browser:**
+
+    Open your browser and navigate to [http://localhost:3000](http://localhost:3000). You should see the Next.js application running!
+
+## Using Docker
+
+If you prefer to use Docker, you can pull and run the Docker image from Docker Hub. Follow these steps:
+
+1. **Pull the Docker Image:**
+
+    ```sh
+    docker pull zethyst/blueprint.ai:1.0.0
+    ```
+
+2. **Run the Docker Container:**
+
+    ```sh
+    docker run -p 3000:3000 zethyst/blueprint.ai:1.0.0
+    ```
+
+3. **Open Your Browser:**
+
+    Open your browser and navigate to [http://localhost:3000](http://localhost:3000). Your Next.js application should be running inside the Docker container!
+
+## License
+
+This project is licensed under the MIT License.
+
+
 
 <h2>📬 Contact</h2>
 

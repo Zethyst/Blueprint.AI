@@ -1,3 +1,4 @@
+# docker build -t zethyst/blueprint.ai:1.0.0 .
 # Stage 1: Build the Next.js application
 FROM node:18 AS builder
 
