@@ -53,16 +53,9 @@
 ![workspace](/img/workspace.png)
 ![view](/img/view.png)
 ![login](/img/login.png)
-![mobile](/img/mobile.png)
 
-## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Running the Project Locally](#running-the-project-locally)
-- [Using Docker](#using-docker)
-- [License](#license)
-
-## Getting Started
+## 🚀 Getting Started:
 
 Before you begin, ensure you have the following installed on your local machine:
 
@@ -70,7 +63,7 @@ Before you begin, ensure you have the following installed on your local machine:
 - [npm](https://www.npmjs.com/) (v6 or later) or [Yarn](https://yarnpkg.com/) (v1 or later)
 - [Docker](https://www.docker.com/get-started)
 
-## Running the Project Locally
+## 🏠 Running the Project Locally:
 
 Follow these steps to run the Next.js project on your local machine:
 
@@ -113,7 +106,7 @@ Follow these steps to run the Next.js project on your local machine:
 
     Open your browser and navigate to [http://localhost:3000](http://localhost:3000). You should see the Next.js application running!
 
-## Using Docker
+## 🐳 Using Docker:
 
 If you prefer to use Docker, you can pull and run the Docker image from Docker Hub. Follow these steps:
 
@@ -133,7 +126,7 @@ If you prefer to use Docker, you can pull and run the Docker image from Docker H
 
     Open your browser and navigate to [http://localhost:3000](http://localhost:3000). Your Next.js application should be running inside the Docker container!
 
-## License
+## 📜 License:
 
 This project is licensed under the MIT License.
 
