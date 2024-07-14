@@ -1,6 +1,6 @@
 "use client";
 import { Loader2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Timeline from "./Timeline";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -125,6 +125,20 @@ function Generate() {
   const handlePrev = () => {
     setCurrentStep((prevState) => prevState - 1);
   };
+
+  const handleEnterPress = useCallback((event:any) => {
+    if (event.key === 'Enter') {
+      handleNext();
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEnterPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleEnterPress);
+    };
+  }, [handleEnterPress]);
   return (
     <div
       id="generate"

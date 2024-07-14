@@ -55,10 +55,10 @@ const VerificationEmail = ({
               </Text>
             </Row>
             <Row>
-              <Text className="text-sm">{otp}</Text>
+              <Text className="text-sm tracking-wider"><strong>{otp}</strong></Text>
             </Row>
             <Text className="text-sm">
-              We're excited to have you onboard at <strong>{company}</strong>.
+              We're excited to have you onboard at {company}
               We hope you enjoy your journey with us. If you have any questions
               or need assistance, feel free to reach out.
             </Text>

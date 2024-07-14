@@ -195,7 +195,7 @@ const VerifyAccount: React.FC = () => {
       <div className="color"></div>
       <div className="color"></div>
       <div className=" overflow-hidden absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] shadow-md rounded-3xl max-w-screen-sm w-80 md:w-96 m-auto mt-4 flex flex-col justify-center items-center">
-        <div className="h-[50%] bg-[#00000011] glass w-full p-10 flex flex-col gap-8 justify-center items-center">
+        <div className="h-[50%] bg-[#0000002c] glass w-full p-10 flex flex-col gap-8 justify-center items-center">
           <p className="text-center text-gray-300">
             We have sent an OTP to{" "}
             {<span className="cool-text">{decodedEmail}.</span>} Please enter it
@@ -219,12 +219,15 @@ const VerifyAccount: React.FC = () => {
                 />
               ))}
             </div>
+            <div className={`button2 translate-y-3 ${sending?"opacity-60 pointer-events-none":""}`}>
+              <div className="button-layer2"></div>
             <button
               type="submit"
-              className={` btn h-12 w-48 ${sending?"opacity-60 pointer-events-none":""} bg-[#00000097] hover:scale-105 transition-all duration-200 flex justify-center items-center translate-y-3  uppercase text-center font-semibold text-white rounded-2xl`}
-            >
+              className={` btn h-12 w-48  bg-[#000000] text-black  transition-all duration-200 flex justify-center items-center uppercase text-center font-bold  tracking-wide rounded-2xl`}
+              >
               {sending ?( <><Loader2 className="mr-2 h-6 w-6  animate-spin"/> Please wait...</>) : ("Verify")}
             </button>
+              </div>
           </form>
           {resending?( <Loader/>):""}
           <p

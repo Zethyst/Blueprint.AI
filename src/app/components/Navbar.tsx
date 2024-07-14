@@ -101,7 +101,7 @@ const Navbar: React.FC = (
   const user: User = session?.user as User;
   return (
     <div
-      className={`sticky  ${navbarClass} bg-[#00000055] top-0 z-50 w-full px-4 py-3 flex justify-between items-center gap-5 backdrop-blur-lg shadow-lg `}
+      className={`sticky  ${navbarClass} bg-[#00000055] top-0 z-50 w-full px-5 md:px-0 py-3 flex justify-between items-center gap-5 backdrop-blur-lg shadow-lg `}
     >
       {/* MOBILE HAMBURGER */}
   
@@ -113,7 +113,7 @@ const Navbar: React.FC = (
       <Link href="/">
         <h2
           style={{ fontFamily: "Robot" }}
-          className="text-xl tracking-widest font-semibold cursor-pointer font-gradient md:ml-28"
+          className="hidden md:block text-xl tracking-widest font-semibold cursor-pointer font-gradient md:ml-28"
         >
           Blueprint.AI
         </h2>

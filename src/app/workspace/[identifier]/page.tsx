@@ -91,7 +91,7 @@ function Page() {
   }, [pdfName]);
 
   useEffect(() => {
-    const totalDuration = 60 * 1000; // 1 minute in milliseconds
+    const totalDuration = 90 * 1000; // 1 minute in milliseconds
     const incrementInterval = 100; // Update every 100 milliseconds
     const pixelsPerSecond = 600 / (totalDuration / 1000); // Assuming 600px width for 100% progress
     const pixelsPerIncrement = pixelsPerSecond * (incrementInterval / 1000);

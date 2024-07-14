@@ -57,7 +57,15 @@ const MobileBurgerView: React.FC = () => {
           showMobileMenu ? "openMobileContainer" : "closeMobileContainer"
         } bg-[#00000077] w-[70vw] min-h-[100vh] z-20 max-h-[100vh] fixed left-[-2000px] flex justify-center items-center overflow-hidden  transition-all ease-in duration-500`}
       >
-        <div className="mm-Wrapper flex flex-col justify-center items-center gap-36 overflow-hidden py-16 px-5 w-full z-30">
+        <div className="mm-Wrapper flex flex-col justify-center items-center gap-24 overflow-hidden py-16 px-5 w-full z-30">
+          <Link href="/">
+            <h2
+              style={{ fontFamily: "Robot" }}
+              className="text-xl tracking-widest font-semibold cursor-pointer font-gradient md:ml-28"
+            >
+              Blueprint.AI
+            </h2>
+          </Link>
           <div>
             <Link href={`/u/${user?.username}`}>
               <button
@@ -77,7 +85,7 @@ const MobileBurgerView: React.FC = () => {
               </button>
             </Link>
           </div>
-          <div className="flex justify-center items-center gap-5 translate-y-24 text-[#f1f7feb5]">
+          <div className="flex justify-center items-center gap-5 translate-y-16 text-[#f1f7feb5]">
             <Link href="https://github.com/Zethyst" target="_blank">
               <FontAwesomeIcon
                 icon={faGithub}
@@ -121,21 +129,21 @@ const MobileBurgerView: React.FC = () => {
             </Link>
           </div>
           {session ? (
-          <button
-            onClick={() => signOut()}
-            className="rounded-xl px-5 py-2 text-sm bg-slate-800 bg-opacity-80 hover:bg-slate-900 tracking-wide text-gray-200 "
-            role="menuitem"
-          >
-            <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />{" "}
-            Logout
-          </button>
-          ):(
+            <button
+              onClick={() => signOut()}
+              className="rounded-xl px-5 py-2 text-sm bg-slate-800 bg-opacity-80 hover:bg-slate-900 tracking-wide text-gray-200 "
+              role="menuitem"
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />{" "}
+              Logout
+            </button>
+          ) : (
             <Link href="/sign-in">
-                <button className="bg-slate-800 bg-opacity-80 hover:bg-slate-900 tracking-wide text-gray-200 font-semibold px-5 py-2 flex justify-center items-center gap-3 rounded-xl">
-                  <FontAwesomeIcon icon={faRightToBracket} />
-                  <p>Login</p>
-                </button>
-              </Link>
+              <button className="bg-slate-800 bg-opacity-80 hover:bg-slate-900 tracking-wide text-gray-200 font-semibold px-5 py-2 flex justify-center items-center gap-3 rounded-xl">
+                <FontAwesomeIcon icon={faRightToBracket} />
+                <p>Login</p>
+              </button>
+            </Link>
           )}
         </div>
       </div>
@@ -147,7 +155,7 @@ const MobileBurgerView: React.FC = () => {
         } w-[100vw] min-h-[100vh] max-h-[100vh] relative transition-all ease-in duration-500 flex justify-center items-center overflow-hidden -z-10 `}
       ></div>
     </div>
-  )
+  );
 };
 
 export default MobileBurgerView;

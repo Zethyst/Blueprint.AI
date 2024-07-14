@@ -399,6 +399,9 @@ section .color:nth-child(2) {
   border-radius: 15px;
   overflow: hidden;
 }
+.button2{
+  height: 45px !important;
+}
 
 .button2:active,
 .button3:active,
