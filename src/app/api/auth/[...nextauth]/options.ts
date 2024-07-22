@@ -97,12 +97,24 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      await dbConnect();
       if (user) {
         token._id = user._id?.toString();
         token.isVerified = user.isVerified;
         token.username = user.username;
         token.email = user.email;
+        if (account && account.type !== "credentials") {
+          const existingUser = await UserModel.findOne({ email: user.email });
+          if (!existingUser) {
+            const newUser = new UserModel({
+              username: user.username,
+              email: user.email,
+              isVerified: true,
+            });
+            await newUser.save();
+          }
+        }
       }
       return token;
     },

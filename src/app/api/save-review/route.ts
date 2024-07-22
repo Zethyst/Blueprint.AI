@@ -2,16 +2,17 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import { authOptions } from "../auth/[...nextauth]/options";
-import { User, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import SRSModel from "@/models/SRS";
 
-export async function GET(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
+    const { rating, praises } = await req.json();
     await dbConnect();
     const session = await getServerSession(authOptions);
-    const user: User = session?.user as User;
+    const user = session?.user;
+
     if (!session || !session.user) {
-      //! Means user is not logged in
       return NextResponse.json(
         {
           success: false,
@@ -22,10 +23,11 @@ export async function GET(request: NextRequest) {
         }
       );
     }
-    
-    const srs = await SRSModel.find({ owner: user._id });
 
-    if (srs.length===0) {
+    const srs = await SRSModel.findOne({ owner: user?._id }).sort({
+      createdAt: -1,
+    });
+    if (!srs) {
       return NextResponse.json(
         {
           success: false,
@@ -36,26 +38,25 @@ export async function GET(request: NextRequest) {
         }
       );
     }
-    
+    if (rating) {
+      srs.rating = rating;
+    }
+    if (praises) {
+      srs.praise = praises;
+    }
+    srs.save();
+
     return NextResponse.json(
       {
         success: true,
-        SRSDocuments: srs.map((doc, index) => ({
-          mongoID:doc._id,
-          id: index + 1,
-          name: doc.name,
-          status: doc.status,
-          created: doc.createdAt,
-          pdf: doc.pdf_url,
-          word: doc.word_url,
-        })),
+        message: "Review Saved Successfully",
       },
       {
         status: 200,
       }
     );
   } catch (error) {
-    console.error("Error checking SRS status", error);
+    console.error("Error saving review", error);
     return NextResponse.json(
       {
         success: false,

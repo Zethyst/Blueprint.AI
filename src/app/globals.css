@@ -232,6 +232,9 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+.css-1c99szj-MuiRating-icon {
+  color:#8c8a8ae3 !important;
+}
 .glass {
   /* box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2); */
   border: 0 solid #e5e7eb;
@@ -386,6 +389,14 @@ section .color:nth-child(2) {
 .not-selected {
   border: 2px solid #cccccc64;
   border-bottom: 4px solid #cccccc64;
+}
+
+.praise-gradient{
+  background: radial-gradient(
+    circle farthest-corner at 22.4% 21.7%,
+    #04bde4 0%,
+    #0253b9 100.2%
+  );
 }
 
 /* Gradient Button */

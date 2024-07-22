@@ -30,7 +30,7 @@ export interface User extends Document {
 const UserSchema: Schema<User> = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, "Username is required"],
+    // required: [true, "Username is required"],
     trim: true,
     unique: true,
   },
@@ -44,7 +44,7 @@ const UserSchema: Schema<User> = new mongoose.Schema({
     type: String,
     minLength: 7,
     maxLength:1024,
-    required: [true, "Password is required"],
+    // required: [true, "Password is required"],
   },
   isVerified: {
     type: Boolean,
@@ -52,7 +52,7 @@ const UserSchema: Schema<User> = new mongoose.Schema({
   },
   verifyCode: {
     type: String,
-    required: [true, "Verify Code is required"],
+    // required: [true, "Verify Code is required"],
   },
   verifyCodeExpiry: {
     type: Date,

@@ -5,6 +5,8 @@ export interface SRS extends Document {
   name: string;
   description: string[];
   status: string;
+  rating: number;
+  praise: string[];
   pdf_url: string;
   word_url: string;
   createdAt: Date;
@@ -26,6 +28,13 @@ const SRSSchema: Schema<SRS> = new mongoose.Schema({
     type: String,
     required: true,
     default:"Generating"
+  },
+  rating: {
+    type: Number,
+    default:5,
+  },
+  praise: {
+    type: [String],
   },
   pdf_url: {
     type: String,

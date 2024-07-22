@@ -43,7 +43,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
 }) => {
   return (
     <div className="w-full flex justify-center gap-20 items-center">
-      <div className={`mt-5 ${currentStep <= 1 ? "hidden " : ""} button4`}>
+      <div className={`mt-10 ${currentStep <= 1 ? "hidden " : ""} button4`}>
         <div className={`button-layer4`}></div>
         <button
           type="submit"

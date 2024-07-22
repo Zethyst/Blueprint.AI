@@ -113,9 +113,7 @@ const Page = () => {
         const axiosError = error as AxiosError<APIResponse>;
         let errorMessage = axiosError.response?.data.message;
         toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: errorMessage,
+          title: errorMessage,
         });
       }
     };

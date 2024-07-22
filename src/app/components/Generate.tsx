@@ -126,11 +126,23 @@ function Generate() {
     setCurrentStep((prevState) => prevState - 1);
   };
 
-  const handleEnterPress = useCallback((event:any) => {
+  const handleEnterPress = (event:any) => {
     if (event.key === 'Enter') {
-      handleNext();
+      if ((main !== "" && currentStep === 1)|| 
+      (selectedPurpose !== "" && currentStep === 2) ||
+      (selectedTarget !== "" && currentStep === 3) ||
+      (selectedKeys.length !== 0 && currentStep === 4) ||
+      (selectedPlatforms.length !== 0 && currentStep === 5) ||
+      (selectedIntegrations.length !== 0 && currentStep === 6) ||
+      (selectedPerformance.length !== 0 && currentStep === 7) ||
+      (selectedSecurity.length !== 0 && currentStep === 8) ||
+      (selectedStorage !== "" && currentStep === 9) ||
+      (selectedEnvironment !== "" && currentStep === 10) ||
+      (selectedLanguage.length !== 0 && currentStep === 11)) {
+        handleNext();
+      }
     }
-  }, []);
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', handleEnterPress);

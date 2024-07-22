@@ -11,7 +11,11 @@ interface PurposeProps {
   selectedPurpose: string;
   setSelectedPurpose: React.Dispatch<React.SetStateAction<string>>;
 }
-function PurposeOption({ isMobile, selectedPurpose, setSelectedPurpose }: PurposeProps) {
+function PurposeOption({
+  isMobile,
+  selectedPurpose,
+  setSelectedPurpose,
+}: PurposeProps) {
   const [other, setOther] = useState("");
 
   function handleClick(option: string) {
@@ -42,7 +46,9 @@ function PurposeOption({ isMobile, selectedPurpose, setSelectedPurpose }: Purpos
       >
         What is the primary purpose of your software product?
       </p>
-      <p className="text-start text-sm md:text-base text-gray-200">Please, select an option:</p>
+      <p className="text-start text-sm md:text-base text-gray-200">
+        Please, select an option:
+      </p>
       {options.map((option, index) => (
         <div
           key={index}
@@ -52,25 +58,18 @@ function PurposeOption({ isMobile, selectedPurpose, setSelectedPurpose }: Purpos
           } bg-[#00000029] hover:bg-[#00000044] active:translate-x-1 active:translate-y-1 md:active:translate-x-0 md:active:translate-y-0 text-gray-200 text-xs md:text-base cursor-pointer rounded-2xl px-7 py-4 w-96 md:w-[550px] flex justify-between items-center gap-5`}
         >
           <p>{option}</p>
-          <div
-            className={`${
-              selectedPurpose === option
-                ? "hidden"
-                : "bg-[#0000004e] p-[10px] rounded-full custom-border3"
-            } `}
-          ></div>
-
-          {selectedPurpose && (
+          {selectedPurpose === option ? (
             <FontAwesomeIcon
               icon={faCircleCheck}
-              size={`${isMobile?"2xl":"xl"}`}
-              className={`${
-                selectedPurpose === option ? "text-[#0253b9]" : "hidden"
-              } `}
+              size={`${isMobile ? "2xl" : "xl"}`}
+              className="text-[#0253b9]"
             />
+          ) : (
+            <div className="bg-[#0000004e] p-[10px] rounded-full custom-border3"></div>
           )}
         </div>
       ))}
+
       <div
         className={`${
           other !== "" ? "selected" : "not-selected"
