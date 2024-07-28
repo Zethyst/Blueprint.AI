@@ -264,15 +264,15 @@ section .color {
 section .color:nth-child(1) {
   bottom: 180px;
   left: 170px;
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
   background-color: #28247477;
 }
 section .color:nth-child(2) {
   bottom: 20px;
   right: 120px;
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   background-color: #0066ff77;
 }
 @media (max-width: 768px) {
@@ -728,7 +728,7 @@ section .color:nth-child(2) {
   );
 }
 .custom-border {
-  border-bottom: 0.1px solid #c5c5c54c;
+  border-bottom: 0.1px solid #c5c5c52d;
 }
 .custom-border2 {
   border-bottom: 0.1px solid #c5c5c59c;

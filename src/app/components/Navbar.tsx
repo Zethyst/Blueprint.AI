@@ -101,7 +101,7 @@ const Navbar: React.FC = (
   const user: User = session?.user as User;
   return (
     <div
-      className={`sticky  ${navbarClass} bg-[#00000055] top-0 z-50 w-full px-5 md:px-0 py-3 flex justify-between items-center gap-5 backdrop-blur-lg shadow-lg `}
+      className={`sticky  ${navbarClass} bg-[#00000055] top-0 z-50 w-full px-5 md:px-0 py-3 flex justify-between items-center gap-5 backdrop-blur-xl shadow-lg `}
     >
       {/* MOBILE HAMBURGER */}
   
