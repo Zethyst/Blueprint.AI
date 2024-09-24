@@ -1,14 +1,15 @@
 import React from "react";
 import Image_1 from "@/assets/image-1.png";
 import Image from "next/image";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 function Hero() {
-  const scrollToSection = (id:any) => {
+  const scrollToSection = (id: any) => {
     const element = document.getElementById(id);
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
-};
+  };
   return (
     <div className="flex flex-col gap-28 my-20">
       <div className="px-6 md:px-32  space-y-14 flex flex-col justify-center items-center">
@@ -27,16 +28,22 @@ function Hero() {
         <div className={`button`}>
           <div className="button-layer"></div>
           <button
-                  onClick={() => scrollToSection('generate')}
+            onClick={() => scrollToSection("generate")}
             style={{ fontFamily: " 'Cinzel Variable', serif" }}
-            className="bg-black px-4 py-2 w-full text-xl font-semibold tracking-wide"
+            className="bg-black px-4 py-2 w-full text-xl font-semibold tracking-wide flex justify-center items-center gap-2"
           >
             Generate
+            <AutoAwesomeIcon />
           </button>
         </div>
       </div>
       <div className="my-20 flex justify-center items-center gap-12">
-        <Image src={Image_1} height={400} alt="Example" className="hidden md:block"></Image>
+        <Image
+          src={Image_1}
+          height={400}
+          alt="Example"
+          className="hidden md:block"
+        ></Image>
         <div className=" space-y-8 flex flex-col md:justify-end md:items-end ">
           <p
             style={{ fontFamily: " 'Cinzel Variable', serif" }}

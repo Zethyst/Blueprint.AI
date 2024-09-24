@@ -77,7 +77,7 @@ function TargetOption({
       <div
         className={`${
           other !== "" ? "selected" : "not-selected"
-        } bg-[#00000029] text-gray-200 rounded-2xl floating-label px-5 pb-5`}
+        } bg-[#00000029] text-gray-200 selected rounded-2xl floating-label px-5 pb-5`}
       >
         <input
           className="bg-transparent py-5  px-3 w-80 md:w-[510px] custom-border2 outline-none poppins-regular"
