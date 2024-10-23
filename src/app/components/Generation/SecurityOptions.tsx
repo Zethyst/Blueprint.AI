@@ -52,7 +52,7 @@ function SecurityOptions({isMobile, selectedSecurity, setSelectedSecurity }: sec
           onClick={() => handleClick(option)}
           className={`${
             selectedSecurity.includes(option) ? "selected" : "not-selected"
-          } bg-[#00000029] hover:bg-[#00000044]  active:translate-x-1 active:translate-y-1 md:active:translate-x-0 md:active:translate-y-0 text-gray-200 text-xs md:text-base cursor-pointer rounded-2xl px-7 py-4 w-96 md:w-[550px] flex justify-between items-center gap-5`}
+          } bg-[#00000029] hover:bg-[#00000044]  active:translate-y-1  md:active:translate-y-1 transition-all duration-150 ease-out text-gray-200 text-xs md:text-base cursor-pointer rounded-2xl px-7 py-4 w-96 md:w-[550px] flex justify-between items-center gap-5`}
         >
           <p>{option}</p>
           <div
