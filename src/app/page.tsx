@@ -20,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     //! Blank Request to activate the server if inactive
     const activate = async () => {
-      await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
+      await axios(`${process.env.NEXT_PUBLIC_PYTHON_BASE_URL}/`);
     };
     activate();
   }, []);
