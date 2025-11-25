@@ -8,8 +8,6 @@ import axios, { AxiosError } from "axios";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// const BaseURL = "http://localhost:5000"
-const BaseURL = "https://blueprint-ai-backend.onrender.com"
 
 export async function POST(req: NextRequest) {
   try {
@@ -81,8 +79,8 @@ export async function POST(req: NextRequest) {
         selectedEnvironment,
         selectedLanguage,
       ];
-
-      const { data } = await axios.post(`${BaseURL}/generate-pdf`, {
+      const username = user?.username ? user.username : user?.name?.split(" ")[0];
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/generate-pdf`, {
         title,
         text: modifiedText,
         username: user?.username,

@@ -23,6 +23,7 @@ import axios, { AxiosError } from "axios";
 import { APIResponse } from "@/types/APIResponse";
 import { useToast } from "@/components/ui/use-toast";
 import NavigationButtons from "./NavigationButtons";
+import { trackEvent } from "@/app/components/MixpanelInitializer";
 
 library.add(faArrowRight, faArrowLeft);
 
@@ -68,6 +69,10 @@ function Generate() {
   }, []);
 
   const handleNext = async () => {
+    trackEvent("User Interacted with SRS Generation Step", {
+      step: currentStep,
+      main: main,
+    });
     setBusy(true);
     // Check if the Vibration API is supported
     if (navigator.vibrate) {
@@ -77,26 +82,45 @@ function Generate() {
     }
     if (currentStep === 11) {
       try {
-        const response = await axios.post(`/api/initiate-srs-generation`, {
+        // Store SRS generation data in localStorage
+        const srsData = {
           main,
           selectedPurpose,
           selectedTarget,
-          selectedKeys,
-          selectedPlatforms,
-          selectedIntegrations,
-          selectedPerformance,
-          selectedSecurity,
+          selectedKeys: Array.isArray(selectedKeys)
+            ? selectedKeys.join(", ")
+            : selectedKeys,
+          selectedPlatforms: Array.isArray(selectedPlatforms)
+            ? selectedPlatforms.join(", ")
+            : selectedPlatforms,
+          selectedIntegrations: Array.isArray(selectedIntegrations)
+            ? selectedIntegrations.join(", ")
+            : selectedIntegrations,
+          selectedPerformance: Array.isArray(selectedPerformance)
+            ? selectedPerformance.join(", ")
+            : selectedPerformance,
+          selectedSecurity: Array.isArray(selectedSecurity)
+            ? selectedSecurity.join(", ")
+            : selectedSecurity,
           selectedStorage,
           selectedEnvironment,
-          selectedLanguage,
+          selectedLanguage: Array.isArray(selectedLanguage)
+            ? selectedLanguage.join(", ")
+            : selectedLanguage,
+        };
+        trackEvent("User Completed SRS Generation", {
+          srsData: srsData,
         });
-        if (response.data.success) {
-          toast({
-            variant: "success",
-            title: "SRS Generation Initiated",
-            description: "AI has started building your SRS",
-          });
-        }
+        localStorage.setItem("srs_generation_data", JSON.stringify(srsData));
+        localStorage.setItem("srs_generation_active", "true");
+
+        toast({
+          variant: "success",
+          title: "SRS Generation Initiated",
+          description: "Starting real-time generation with AI",
+        });
+
+        // Navigate to workspace where SSE will be consumed
         router.replace(
           `/workspace/${session?.user.username || session?.user.email}`
         );
@@ -115,6 +139,7 @@ function Generate() {
         return;
       }
     }
+
     if (step <= currentStep) {
       setStep((prevState) => prevState + 1);
     }
@@ -126,29 +151,31 @@ function Generate() {
     setCurrentStep((prevState) => prevState - 1);
   };
 
-  const handleEnterPress = (event:any) => {
-    if (event.key === 'Enter') {
-      if ((main !== "" && currentStep === 1)|| 
-      (selectedPurpose !== "" && currentStep === 2) ||
-      (selectedTarget !== "" && currentStep === 3) ||
-      (selectedKeys.length !== 0 && currentStep === 4) ||
-      (selectedPlatforms.length !== 0 && currentStep === 5) ||
-      (selectedIntegrations.length !== 0 && currentStep === 6) ||
-      (selectedPerformance.length !== 0 && currentStep === 7) ||
-      (selectedSecurity.length !== 0 && currentStep === 8) ||
-      (selectedStorage !== "" && currentStep === 9) ||
-      (selectedEnvironment !== "" && currentStep === 10) ||
-      (selectedLanguage.length !== 0 && currentStep === 11)) {
+  const handleEnterPress = (event: any) => {
+    if (event.key === "Enter") {
+      if (
+        (main !== "" && currentStep === 1) ||
+        (selectedPurpose !== "" && currentStep === 2) ||
+        (selectedTarget !== "" && currentStep === 3) ||
+        (selectedKeys.length !== 0 && currentStep === 4) ||
+        (selectedPlatforms.length !== 0 && currentStep === 5) ||
+        (selectedIntegrations.length !== 0 && currentStep === 6) ||
+        (selectedPerformance.length !== 0 && currentStep === 7) ||
+        (selectedSecurity.length !== 0 && currentStep === 8) ||
+        (selectedStorage !== "" && currentStep === 9) ||
+        (selectedEnvironment !== "" && currentStep === 10) ||
+        (selectedLanguage.length !== 0 && currentStep === 11)
+      ) {
         handleNext();
       }
     }
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', handleEnterPress);
+    document.addEventListener("keydown", handleEnterPress);
 
     return () => {
-      document.removeEventListener('keydown', handleEnterPress);
+      document.removeEventListener("keydown", handleEnterPress);
     };
   }, [handleEnterPress]);
   return (
@@ -172,63 +199,63 @@ function Generate() {
         ) : null}
         {currentStep === 3 ? (
           <TargetOption
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedTarget={selectedTarget}
             setSelectedTarget={setSelectedTarget}
           />
         ) : null}
         {currentStep === 4 ? (
           <KeyOptions
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedKeys={selectedKeys}
             setSelectedKeys={setSelectedKeys}
           />
         ) : null}
         {currentStep === 5 ? (
           <PlatformOptions
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedPlatforms={selectedPlatforms}
             setSelectedPlatforms={setSelectedPlatforms}
           />
         ) : null}
         {currentStep === 6 ? (
           <IntegrationOptions
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedIntegrations={selectedIntegrations}
             setSelectedIntegrations={setSelectedIntegrations}
           />
         ) : null}
         {currentStep === 7 ? (
           <PerformanceOptions
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedPerformance={selectedPerformance}
             setSelectedPerformance={setSelectedPerformance}
           />
         ) : null}
         {currentStep === 8 ? (
           <SecurityOptions
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedSecurity={selectedSecurity}
             setSelectedSecurity={setSelectedSecurity}
           />
         ) : null}
         {currentStep === 9 ? (
           <StorageOption
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedStorage={selectedStorage}
             setSelectedStorage={setSelectedStorage}
           />
         ) : null}
         {currentStep === 10 ? (
           <EnvironmentOption
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedEnvironment={selectedEnvironment}
             setSelectedEnvironment={setSelectedEnvironment}
           />
         ) : null}
         {currentStep === 11 ? (
           <LanguageOptions
-          isMobile={isMobile}
+            isMobile={isMobile}
             selectedLanguage={selectedLanguage}
             setSelectedLanguage={setSelectedLanguage}
           />

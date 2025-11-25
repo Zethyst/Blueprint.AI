@@ -1,6 +1,12 @@
 import React from "react";
 import Card from "./Card";
-import { faFileAlt, faClock, faUsersGear, faHandshake, faUserGear } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFileAlt,
+  faClock,
+  faUsersGear,
+  faHandshake,
+  faUserGear,
+} from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(faFileAlt, faClock, faUsersGear, faHandshake);
 
@@ -9,7 +15,10 @@ function What() {
     <section>
       {/* <div className='color'></div>
 <div className='color'></div> */}
-      <div id="what" className="my-32 space-y-8 flex flex-col justify-center items-center px-5 md:px-32">
+      <div
+        id="what"
+        className="my-32 space-y-8 flex flex-col justify-center items-center px-5 md:px-32"
+      >
         <p
           style={{ fontFamily: " 'Cinzel Variable', serif" }}
           className="text-3xl md:text-6xl text-center tracking-wider font-medium text-white  font-gradient"
@@ -31,17 +40,17 @@ function What() {
             description="Our tool assists you in creating a preliminary software requirement
             specification based on the information you provide. It generates a
             draft that outlines the fundamental aspects of your project."
-            />
+          />
           <Card
             icon={faClock}
             title="Save Time and Resources"
             description="Instead of spending excessive time deliberating over every detail in the early stages, our tool jumpstarts the process. This means you can dedicate more time to the creative and strategic aspects of your project."
-            />
+          />
           <Card
             icon={faUserGear}
             title="Customization Collaboration"
             description="The generated draft is not set in stone. It's a dynamic document that you can customize according to your specific needs. Collaborate with your team to add, modify, or remove requirements as the project evolves."
-            />
+          />
           <Card
             icon={faHandshake}
             title="Minimize Misunderstandings"

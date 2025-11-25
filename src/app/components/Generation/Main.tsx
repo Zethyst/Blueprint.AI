@@ -25,14 +25,14 @@ function Main({ main, setMain }: MainProps) {
         />
       </div>
       <p className="text-sm md:text-base px-5 md:px-0 text-center md:text-left w-[400px] md:w-[500px]">
-        For instance, A marketplace for freelancers and service workers, whether
+        For instance: <span className="text-gray-400">A marketplace for freelancers and service workers, whether
         it's marketing, development, healthcare, finance, consulting, or any
         other type of service. Users can register in the app, post their offers,
         search and find other offers, contact the owner in case an interesting
         proposal is found, and complete the transaction/exchange (outside of the
         platform). All users and listings are posted (available for other users)
         only after Admin's approval. So that Admins can control the quality of
-        the community.
+        the community.</span>
       </p>
     </>
   );

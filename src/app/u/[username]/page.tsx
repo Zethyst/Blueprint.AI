@@ -15,6 +15,7 @@ import Card from "./Card";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import lockImage from "../../assets/locker.png";
+import { Loader2 } from "lucide-react";
 
 library.add(faTrash, faPenToSquare);
 
@@ -44,8 +45,6 @@ interface DataItem {
   word: string;
 }
 
-// const BaseURL = "http://localhost:5000";
-const BaseURL = "https://blueprint-ai-backend.onrender.com";
 
 const Page = () => {
   const [data, setData] = useState<DataItem[]>([]);
@@ -122,8 +121,13 @@ const Page = () => {
 
   const handleDownload = async (pdfName: string) => {
     try {
+      // Extract username from filename (format: username_timestamp.pdf)
+      const filename = pdfName.endsWith('.pdf') ? pdfName : `${pdfName}.pdf`;
+      const username = pdfName.split('_')[0]; // Get username before first underscore
+      
+      // Use Python backend with new URL structure
       const response = await axios.get(
-        `${BaseURL}/download-pdf/${pdfName}.pdf`,
+        `${process.env.NEXT_PUBLIC_PYTHON_BASE_URL}/download-pdf/${username}/${filename}`,
         {
           responseType: "blob",
         }
@@ -132,14 +136,15 @@ const Page = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `${pdfName}.pdf`);
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading the PDF file", error);
       const axiosError = error as AxiosError<APIResponse>;
-      let errorMessage = axiosError.response?.data.message;
+      let errorMessage = axiosError.response?.data.message || "Failed to download PDF";
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -155,8 +160,13 @@ const Page = () => {
 
   const handleEdit = async (wordName: string) => {
     try {
+      // Extract username from filename (format: username_timestamp.docx)
+      const filename = wordName.endsWith('.docx') ? wordName : `${wordName}.docx`;
+      const username = wordName.split('_')[0]; // Get username before first underscore
+      
+      // Use Python backend with new URL structure
       const response = await axios.get(
-        `${BaseURL}/download-word/${wordName}.docx`,
+        `${process.env.NEXT_PUBLIC_PYTHON_BASE_URL}/download-word/${username}/${filename}`,
         {
           responseType: "blob",
         }
@@ -165,14 +175,15 @@ const Page = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `${wordName}.docx`);
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error downloading the PDF file", error);
+      console.error("Error downloading the Word file", error);
       const axiosError = error as AxiosError<APIResponse>;
-      let errorMessage = axiosError.response?.data.message;
+      let errorMessage = axiosError.response?.data.message || "Failed to download Word document";
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -204,7 +215,17 @@ const Page = () => {
       <div className="color"></div>
       <div className="overflow-hidden my-10 w-full shadow-md  mt-4 flex flex-col justify-center items-center">
         <div className="bg-[#00000046] w-[80%]  glass rounded-3xl p-10 self-center flex flex-col gap-8 justify-center items-center ">
-          {status !== "authenticated" ? (
+          {status === "loading" ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 
+                className="h-16 w-16 animate-spin"
+                style={{
+                  color: "#f3df78",
+                  filter: "drop-shadow(0 0 10px rgba(243, 223, 120, 0.6))"
+                }}
+              />
+            </div>
+          ) : status !== "authenticated" ? (
             <div className="flex justify-center items-center py-10">
               <Image
                 src={lockImage}
@@ -214,7 +235,7 @@ const Page = () => {
               />
               <div className={`button2 absolute z-30 top-10 shadow-2xl `}>
                 <div className="button-layer2"></div>
-                <Link href="sign-in">
+                <Link href="/sign-in">
                   <button className="bg-black px-4 py-2  w-full text-xl  font-bold tracking-wide text-black uppercase poppins-regular">
                     Login
                   </button>
@@ -223,7 +244,13 @@ const Page = () => {
             </div>
           ) : loading ? (
             <div className="-translate-y-4">
-              <Loader />
+             <Loader2 
+                className="h-16 w-16 animate-spin"
+                style={{
+                  color: "#f3df78",
+                  filter: "drop-shadow(0 0 10px rgba(243, 223, 120, 0.6))"
+                }}
+              />
             </div>
           ) : isMobile ? (
             <div className=" flex flex-col justify-center items-center gap-3 w-full  ">

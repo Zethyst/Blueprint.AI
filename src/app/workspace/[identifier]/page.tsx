@@ -1,6 +1,6 @@
 "use client";
 import type { Metadata } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import axios, { AxiosError } from "axios";
@@ -16,44 +16,210 @@ import Stars from "./Stars";
 import Praise from "./Praise";
 import SRSModel from "@/models/SRS";
 
-// const baseURL = "http://localhost:5000"
-const baseURL = "https://blueprint-ai-backend.onrender.com";
+interface SRSStreamData {
+  status: 'initiated' | 'processing' | 'completed' | 'error';
+  message: string;
+  title?: string;
+  pdfName?: string;
+  wordName?: string;
+  pdfPath?: string;
+  wordPath?: string;
+  text?: string;
+}
 
 function Page() {
   const { toast } = useToast();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const [pdfName, setPdfName] = useState("");
+  const [wordName, setWordName] = useState("");
+  const [pdfPath, setPdfPath] = useState("");
+  const [wordPath, setWordPath] = useState("");
+  const [srsTitle, setSrsTitle] = useState("");
   const [finish, setFinish] = useState(false);
   const [rating, setRating] = useState<number | null>(0);
   const [praises, setPraises] = useState<string[]>([]);
-  const [progress, setProgress] = useState(() => {
-    const storedProgress = localStorage.getItem("progress");
-    return storedProgress ? parseFloat(storedProgress) : 0;
-  });
+  const [progress, setProgress] = useState(0);
+  const [currentMessage, setCurrentMessage] = useState("Preparing to generate...");
+  const [generationLogs, setGenerationLogs] = useState<string[]>([]);
+  const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  
+  // Store user info in localStorage when session is available
   useEffect(() => {
-    return () => {
-      localStorage.removeItem("progress");
-    };
-  }, []);
+    if (session?.user) {
+      console.log("session.user", session.user);
+      
+      const userId = (session.user as any)._id;
+      const username = (session.user as any).username || session.user.email?.split('@')[0] || 'user';
+      
+      // Only store if we have a valid userId
+      if (userId) {
+        const userInfo = {
+          userId,
+          username
+        };
+        localStorage.setItem('srs_user_info', JSON.stringify(userInfo));
+      } else {
+        console.warn('User session missing _id. OAuth users may need to sign in again.');
+      }
+    }
+  }, [session]);
 
+  // SSE consumption effect
   useEffect(() => {
-    const checkSrsStatus = async () => {
-      try {
-        const response = await axios.get(`/api/check-srs-status`);
-        if (response.data.status === "Completed") {
-          setPdfName(response.data.pdf_url);
-          setFinish(true);
-          setProgress(600);
-          clearInterval(intervalId);
+    const startSSEGeneration = async () => {
+      // Check if there's an active generation in localStorage
+      const isGenerationActive = localStorage.getItem('srs_generation_active');
+      const storedData = localStorage.getItem('srs_generation_data');
+      
+      if (!isGenerationActive || !storedData) {
+        // Check if there's a completed result
+        const storedResult = localStorage.getItem('srs_result');
+        if (storedResult) {
+          try {
+            const result = JSON.parse(storedResult);
+            setPdfName(result.pdfName);
+            setWordName(result.wordName);
+            setPdfPath(result.pdfPath);
+            setWordPath(result.wordPath);
+            setSrsTitle(result.title);
+            setFinish(true);
+            setProgress(600);
+          } catch (e) {
+            console.error('Error parsing stored result:', e);
+          }
         }
-      } catch (error) {
-        console.error("Error checking SRS status", error);
+        return;
+      }
+
+      try {
+        const srsData = JSON.parse(storedData);
+        
+        // Add user information from session
+        const userData = localStorage.getItem('srs_user_info');
+        if (userData) {
+          const { userId, username } = JSON.parse(userData);
+          srsData.userId = userId;
+          srsData.username = username;
+        }
+        
+        abortControllerRef.current = new AbortController();
+        
+        const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BASE_URL}/generate-srs-stream`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'text/event-stream',
+          },
+          body: JSON.stringify(srsData),
+          signal: abortControllerRef.current.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const reader = response.body?.getReader();
+        readerRef.current = reader || null;
+        const decoder = new TextDecoder();
+
+        if (!reader) {
+          throw new Error('Response body is null');
+        }
+
+        let buffer = '';
+        let eventCount = 0;
+        const totalSteps = 7;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('event: close')) {
+              console.log('Stream closed by server');
+              return;
+            }
+
+            if (line.startsWith('data: ')) {
+              const data = line.substring(6);
+              try {
+                const parsed: SRSStreamData = JSON.parse(data);
+                
+                // Update UI with progress
+                setCurrentMessage(parsed.message);
+                setGenerationLogs(prev => [...prev, parsed.message]);
+
+                eventCount++;
+                const progressWidth = Math.min((eventCount / totalSteps) * 600, 600);
+                setProgress(progressWidth);
+
+                if (parsed.status === 'completed') {
+                  setPdfName(parsed.pdfName || '');
+                  setWordName(parsed.wordName || '');
+                  setPdfPath(parsed.pdfPath || '');
+                  setWordPath(parsed.wordPath || '');
+                  setSrsTitle(parsed.title || '');
+                  setFinish(true);
+                  setProgress(600);
+                  
+                  // Store result
+                  localStorage.setItem('srs_result', JSON.stringify(parsed));
+                  localStorage.removeItem('srs_generation_active');
+                  
+                  toast({
+                    variant: "success",
+                    title: "SRS Generated Successfully!",
+                    description: `${parsed.title} is ready to download`,
+                  });
+                } else if (parsed.status === 'error') {
+                  setCurrentMessage(`Error: ${parsed.message}`);
+                  localStorage.removeItem('srs_generation_active');
+                  
+                  toast({
+                    variant: "destructive",
+                    title: "Generation Failed",
+                    description: parsed.message,
+                  });
+                }
+              } catch (e) {
+                console.error('Failed to parse SSE data:', e);
+              }
+            }
+          }
+        }
+      } catch (error: any) {
+        if (error.name === 'AbortError') {
+          console.log('SSE connection aborted');
+          return;
+        }
+        console.error('Error during SSE generation:', error);
+        toast({
+          variant: "destructive",
+          title: "Connection Error",
+          description: "Failed to connect to generation service",
+        });
+        localStorage.removeItem('srs_generation_active');
       }
     };
 
-    const intervalId = setInterval(checkSrsStatus, 10000); // Poll every 20 seconds
-    return () => clearInterval(intervalId);
-  }, [setPdfName]);
+    startSSEGeneration();
+
+    // Cleanup on unmount
+    return () => {
+      if (readerRef.current) {
+        readerRef.current.cancel();
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [toast]);
 
   const saveReview = async (rating: number | null, praises: string[]) => {
     try {
@@ -78,39 +244,63 @@ function Page() {
     };
   }, [rating, praises]);
 
-  const handleDownload = async () => {
+  const handleDownload = async (type: 'pdf' | 'word' = 'pdf') => {
     try {
-      console.log(pdfName);
+      const path = type === 'pdf' ? pdfPath : wordPath;
+      const filename = type === 'pdf' ? pdfName : wordName;
+      
+      if (!path || !filename) {
+        toast({
+          variant: "destructive",
+          title: "File not available",
+          description: "The document is not ready yet",
+        });
+        return;
+      }
 
-      const response = await axios.get(
-        `${baseURL}/download-pdf/${pdfName}.pdf`,
-        {
-          responseType: "blob",
-        }
-      );
+      // Extract username and filename from path (format: "username/pdfs/file.pdf")
+      const pathParts = path.split('/');
+      const username = pathParts[0];
+      const actualFilename = pathParts[2];
+      
+      const endpoint = type === 'pdf' ? 'download-pdf' : 'download-word';
+      const url = `${process.env.NEXT_PUBLIC_PYTHON_BASE_URL}/${endpoint}/${username}/${actualFilename}`;
+      
+      const response = await axios.get(url, {
+        responseType: "blob",
+      });
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `${pdfName}.pdf`);
+      link.href = downloadUrl;
+      link.setAttribute("download", actualFilename);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
     } catch (error) {
-      console.error("Error downloading the PDF file", error);
+      console.error("Error downloading the file", error);
       const axiosError = error as AxiosError<APIResponse>;
-      let errorMessage = axiosError.response?.data.message;
+      let errorMessage = axiosError.response?.data.message || "Failed to download file";
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        title: "Download Failed",
         description: errorMessage,
       });
     }
   };
 
   const handleView = () => {
-    // router.replace(`/view-pdf/${pdfName}`);
-    window.open(`/view-pdf/${encodeURIComponent(pdfName)}`, "_blank");
+    if (!pdfPath) {
+      toast({
+        variant: "destructive",
+        title: "PDF not available",
+        description: "The PDF is not ready yet",
+      });
+      return;
+    }
+    
+    window.open(`/view-pdf/${encodeURIComponent(pdfPath)}`, "_blank");
   };
 
   useEffect(() => {
@@ -118,32 +308,6 @@ function Page() {
       setFinish(true);
     }
   }, [pdfName]);
-
-  useEffect(() => {
-    const totalDuration = 90 * 1000; // 1 minute in milliseconds
-    const incrementInterval = 100; // Update every 100 milliseconds
-    const pixelsPerSecond = 600 / (totalDuration / 1000); // Assuming 600px width for 100% progress
-    const pixelsPerIncrement = pixelsPerSecond * (incrementInterval / 1000);
-
-    let currentWidth = progress;
-    // if (finish) currentWidth = 600;
-
-    const interval = setInterval(() => {
-      if (currentWidth >= 600) {
-        clearInterval(interval);
-        setFinish(true);
-        localStorage.removeItem("progress");
-        return;
-      }
-      currentWidth += pixelsPerIncrement;
-      setProgress(currentWidth);
-    }, incrementInterval);
-
-    return () => {
-      localStorage.setItem("progress", currentWidth.toString());
-      clearInterval(interval);
-    };
-  }, [progress]);
 
   return (
     <section className="">
@@ -159,10 +323,15 @@ function Page() {
               >
                 {finish ? "Your document is ready!" : "We're working on it"}
               </p>
+              {srsTitle && (
+                <p className="text-lg md:text-xl text-center tracking-wider font-medium text-blue-300">
+                  {srsTitle}
+                </p>
+              )}
               <p className="text-base md:text-xl grace text-center tracking-wider font-medium text-gray-300">
                 {finish
                   ? "You can now view or download your SRS document"
-                  : "Give us a moment"}
+                  : currentMessage}
               </p>
               <div className="time_line_container">
                 <div
@@ -192,11 +361,25 @@ function Page() {
                 >
                   <div className="button-layer"></div>
                   <button
-                    onClick={handleDownload}
+                    onClick={() => handleDownload('pdf')}
                     className="text-slate-200 bg-opacity-65 flex justify-center items-center gap-2 w-full py-3 rounded-xl font-semibold"
                   >
                     <DownloadIcon />
-                    <p>Download</p>
+                    <p>PDF</p>
+                  </button>
+                </div>
+                <div
+                  className={`button ${
+                    finish ? "" : "pointer-events-none opacity-20"
+                  }`}
+                >
+                  <div className="button-layer"></div>
+                  <button
+                    onClick={() => handleDownload('word')}
+                    className="text-slate-200 bg-opacity-65 flex justify-center items-center gap-2 w-full py-3 rounded-xl font-semibold"
+                  >
+                    <DownloadIcon />
+                    <p>Word</p>
                   </button>
                 </div>
               </div>
@@ -282,7 +465,7 @@ function Page() {
               />
               <div className={`button2 absolute z-30 top-10 shadow-2xl `}>
                 <div className="button-layer2"></div>
-                <Link href="sign-in">
+                <Link href="/sign-in">
                   <button className="bg-black px-4 py-2  w-full text-xl  font-bold tracking-wide text-black uppercase poppins-regular">
                     Login
                   </button>

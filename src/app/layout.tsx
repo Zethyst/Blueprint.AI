@@ -10,6 +10,9 @@ import { MenuProvider } from "@/context/MenuContext";
 const inter = Inter({ subsets: ["latin"] });
 import "@fontsource-variable/cinzel";
 import MobileBurgerView from "./components/MobileBurgerView";
+import "./globals.css"; 
+import MixpanelInitializer from "@/app/components/MixpanelInitializer";
+
 
 export const metadata: Metadata = {
   title: "Blueprint.AI | SRS Generator",
@@ -23,6 +26,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || "";
   return (
     <html lang="en">
       <SessionWrapper>
@@ -45,6 +49,9 @@ export default function RootLayout({
             </MenuProvider>
           </ThemeProvider>
           <Toaster />
+          <MixpanelInitializer
+            MIXPANEL_TOKEN={MIXPANEL_TOKEN}
+          />
         </body>
       </SessionWrapper>
     </html>

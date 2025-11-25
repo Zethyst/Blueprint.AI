@@ -9,6 +9,8 @@ node_modules
 #secrets
 .env
 
+OAUTH_FIX_SUMMARY.md
+
 # testing
 /coverage
 

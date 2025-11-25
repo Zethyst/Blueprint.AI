@@ -14,20 +14,13 @@ import Image from "next/image";
 import lockImage from "./assets/locker.png";
 import axios from "axios";
 
-// const BaseURL = "http://localhost:5000";
-const BaseURL = "https://blueprint-ai-backend.onrender.com";
-
 export default function Home() {
   const { data: session, status } = useSession();
-
-  if (status === "authenticated") {
-    // console.log(session.user.username);
-  }
-
+  console.log("session", session);
   useEffect(() => {
     //! Blank Request to activate the server if inactive
     const activate = async () => {
-      await axios(`${BaseURL}/`);
+      await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
     };
     activate();
   }, []);

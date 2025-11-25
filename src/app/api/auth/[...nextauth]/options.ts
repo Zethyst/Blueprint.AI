@@ -100,20 +100,34 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account }) {
       await dbConnect();
       if (user) {
-        token._id = user._id?.toString();
-        token.isVerified = user.isVerified;
-        token.username = user.username;
-        token.email = user.email;
+        // For OAuth providers (Google, GitHub, etc.)
         if (account && account.type !== "credentials") {
-          const existingUser = await UserModel.findOne({ email: user.email });
+          // Check if user already exists in MongoDB
+          let existingUser = await UserModel.findOne({ email: user.email });
+          
           if (!existingUser) {
+            // Create new user for OAuth sign-in
             const newUser = new UserModel({
-              username: user.username,
+              username: user.name?.toLowerCase().replace(/\s+/g, '_') || user.email?.split('@')[0],
               email: user.email,
               isVerified: true,
+              password: "", // OAuth users don't need password
             });
-            await newUser.save();
+            existingUser = await newUser.save();
+            console.log("[+] New OAuth user created:", existingUser._id);
           }
+          
+          // Update token with MongoDB user data
+          token._id = existingUser._id?.toString();
+          token.isVerified = existingUser.isVerified;
+          token.username = existingUser.username;
+          token.email = existingUser.email;
+        } else {
+          // For credentials login, user object already has MongoDB data
+          token._id = user._id?.toString();
+          token.isVerified = user.isVerified;
+          token.username = user.username;
+          token.email = user.email;
         }
       }
       return token;

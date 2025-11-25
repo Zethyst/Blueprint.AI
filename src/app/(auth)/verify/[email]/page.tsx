@@ -78,7 +78,7 @@ const VerifyAccount: React.FC = () => {
   };
 
   const handleOTPChange = (value: string, index: number) => {
-    let newOTP = { ...OTP };
+    let newOTP = { ...OTP};
     newOTP[index] = value;
     setOTP(newOTP);
 
