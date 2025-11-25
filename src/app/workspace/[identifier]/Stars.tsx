@@ -9,7 +9,7 @@ interface StarProps {
 
 const Stars: React.FC<StarProps> = ({ rating, setRating }) => {
   return (
-    <Box>
+    <Box className='bg-gray-800 rounded-lg'>
       <Rating
         name="simple-controlled"
         value={rating}
