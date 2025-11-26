@@ -102,18 +102,39 @@ export default function Component() {
               <div className="flex gap-5 justify-center items-center w-full mt-5 ">
                 <button
                   title="Github"
-                  onClick={() => signIn("github")}
+                  onClick={() => signIn("github", { callbackUrl: "/" })}
                   className="bg-gray-600 hover:scale-110 transition-all duration-300 bg-opacity-20 p-[10px] text-white text-sm rounded-md font-semibold uppercase"
                 >
-                  <FontAwesomeIcon icon={faGithub} size="xl" />
+                  <FontAwesomeIcon
+                    icon={faGithub}
+                    size="xl"
+                    className="scale-110"
+                  />
                 </button>
                 <button
                   title="Google"
                   onClick={() => signIn("google", { callbackUrl: "/" })}
-                  className="bg-gray-600 hover:scale-110 transition-all duration-300 text-gray-300  text-sm rounded-sm bg-opacity-20 font-semibold uppercase"
+                  className="bg-gray-600 hover:scale-110 transition-all duration-300 text-gray-300  text-sm rounded-md p-2 bg-opacity-20 font-semibold uppercase"
                 >
-                  <Image src={Google} alt="google" height={40} width={40} />
+                  <Image
+                    src="/google.svg"
+                    alt="google"
+                    height={25}
+                    width={25}
+                  />
                 </button>
+                {/* <button
+                  title="Apple"
+                  onClick={() => signIn("apple", { callbackUrl: "/" })}
+                  className="bg-gray-600 hover:scale-110 transition-all duration-300 text-gray-300  text-sm rounded-md p-2 bg-opacity-20  font-semibold uppercase"
+                >
+                  <img
+                    src="/Apple.svg"
+                    alt="apple"
+                    height={25}
+                    width={25}
+                  />
+                </button> */}
                 <button
                   title="Facebook"
                   onClick={() => signIn("facebook", { callbackUrl: "/" })}

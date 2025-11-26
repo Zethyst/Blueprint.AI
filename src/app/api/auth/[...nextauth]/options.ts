@@ -6,7 +6,7 @@ import UserModel from "@/models/User";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
-import FacebookProvider from "next-auth/providers/facebook";
+import AppleProvider from "next-auth/providers/apple";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,9 +22,9 @@ export const authOptions: NextAuthOptions = {
         clientId: process.env.TWITTER_CLIENT_ID as string,
         clientSecret: process.env.TWITTER_CLIENT_SECRET as string
       }),
-      FacebookProvider({
-        clientId: process.env.FACEBOOK_CLIENT_ID as string,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string
+      AppleProvider({
+        clientId: process.env.APPLE_ID as string,
+        clientSecret: process.env.APPLE_SECRET as string
       }),
     CredentialsProvider({
       id: "credentials",

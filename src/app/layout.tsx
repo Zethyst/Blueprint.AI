@@ -14,6 +14,7 @@ import "./globals.css";
 import MixpanelInitializer from "@/app/components/MixpanelInitializer";
 
 
+
 export const metadata: Metadata = {
   title: "Blueprint.AI | SRS Generator",
   description:
