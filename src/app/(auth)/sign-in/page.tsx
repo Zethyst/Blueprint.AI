@@ -102,7 +102,7 @@ export default function Component() {
               <div className="flex gap-5 justify-center items-center w-full mt-5 ">
                 <button
                   title="Github"
-                  onClick={() => signIn("github", { callbackUrl: "/" })}
+                  onClick={() => signIn("github")}
                   className="bg-gray-600 hover:scale-110 transition-all duration-300 bg-opacity-20 p-[10px] text-white text-sm rounded-md font-semibold uppercase"
                 >
                   <FontAwesomeIcon icon={faGithub} size="xl" />
