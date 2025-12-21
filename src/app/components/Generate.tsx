@@ -68,8 +68,15 @@ function Generate() {
     };
   }, []);
 
+  useEffect(() => {
+    trackEvent("Generation Component Viewed", {
+      user: session?.user?.username || session?.user?.email,
+    });
+  }, [session]);
+
   const handleNext = async () => {
     trackEvent("User Interacted with SRS Generation Step", {
+      user: session?.user?.username || session?.user?.email,
       step: currentStep,
       main: main,
     });
@@ -109,6 +116,7 @@ function Generate() {
             : selectedLanguage,
         };
         trackEvent("User Completed SRS Generation", {
+          user: session?.user?.username || session?.user?.email,
           srsData: srsData,
         });
         localStorage.setItem("srs_generation_data", JSON.stringify(srsData));

@@ -8,10 +8,9 @@ import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
 import { APIResponse } from "@/types/APIResponse";
 import { Loader2 } from "lucide-react";
-import LockPersonRoundedIcon from '@mui/icons-material/LockPersonRounded';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-
-
+import LockPersonRoundedIcon from "@mui/icons-material/LockPersonRounded";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import { trackEvent } from "@/app/components/MixpanelInitializer";
 
 export default function Component() {
   const { toast } = useToast();
@@ -21,8 +20,12 @@ export default function Component() {
   });
   const onSubmit = async (data: z.infer<typeof forgetPasswordSchema>) => {
     try {
+      trackEvent("Forgot Password Requested");
       setBusy(true);
-      const response = await axios.post<APIResponse>(`/api/forgot-password`, data);
+      const response = await axios.post<APIResponse>(
+        `/api/forgot-password`,
+        data
+      );
       toast({
         variant: "success",
         title: "E-mail Sent Successfully!",
@@ -50,16 +53,17 @@ export default function Component() {
           <div className="text-center font-gradient">
             <LockPersonRoundedIcon fontSize="large" style={{ scale: "1.6" }} />
           </div>
-          <h1
-            className="my-3 uppercase font-gradient font-extrabold text-3xl w-52 text-center poppins-regular"
-          >
+          <h1 className="my-3 uppercase font-gradient font-extrabold text-3xl w-52 text-center poppins-regular">
             Forgot password
           </h1>
           <p className="md:text-base text-sm text-center px-3">
             Provide your account's email for which you want to reset your
             password!
           </p>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full rounded-lg p-10 pt-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full rounded-lg p-10 pt-4"
+          >
             <div className="white-container flex flex-col justify-center items-center gap-10">
               <div
                 className="flex bg-slate-100  rounded-2xl text-slate-900 font-semibold justify-center items-center pl-3"
@@ -75,8 +79,19 @@ export default function Component() {
               </div>
               <button
                 type="submit"
-                className={`btn flex justify-center  items-center gap-3 px-3 text-sm md:text-lg h-12 w-80 md:w-96 rounded-2xl border-none uppercase font-semibold  ${busy?"opacity-60 pointer-events-none":""} bg-black hover:scale-105 transition-all duration-300 `}
-              >{busy ?( <><Loader2 className="mr-2 h-6 w-6  animate-spin"/> Please wait...</>) : ("Request Password Reset Email")}</button>
+                className={`btn flex justify-center  items-center gap-3 px-3 text-sm md:text-lg h-12 w-80 md:w-96 rounded-2xl border-none uppercase font-semibold  ${
+                  busy ? "opacity-60 pointer-events-none" : ""
+                } bg-black hover:scale-105 transition-all duration-300 `}
+              >
+                {busy ? (
+                  <>
+                    <Loader2 className="mr-2 h-6 w-6  animate-spin" /> Please
+                    wait...
+                  </>
+                ) : (
+                  "Request Password Reset Email"
+                )}
+              </button>
             </div>
           </form>
         </div>
@@ -84,4 +99,3 @@ export default function Component() {
     </section>
   );
 }
-

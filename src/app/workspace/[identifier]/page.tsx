@@ -47,7 +47,7 @@ function Page() {
   // Store user info in localStorage when session is available
   useEffect(() => {
     if (session?.user) {
-      console.log("session.user", session.user);
+      // console.log("session.user", session.user);
       
       const userId = (session.user as any)._id;
       const username = (session.user as any).username || session.user.email?.split('@')[0] || 'user';

@@ -16,7 +16,6 @@ import axios from "axios";
 
 export default function Home() {
   const { data: session, status } = useSession();
-  console.log("session", session);
   useEffect(() => {
     //! Blank Request to activate the server if inactive
     const activate = async () => {
