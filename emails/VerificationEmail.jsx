@@ -47,7 +47,7 @@ const VerificationEmail = ({
             <Heading className="text-2xl font-normal text-center p-0 my-8 mx-0">
               Welcome to <strong>{company}</strong>, {username}!
             </Heading>
-            <Text className="text-sm">Hello {username},</Text>
+            <Text className="text-sm">Hello <strong>{username}</strong>,</Text>
             <Row>
               <Text className="text-sm">
                 Thank you for registering. Please use the following verification
