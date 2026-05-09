@@ -15,7 +15,7 @@ export async function sendResetPasswordEmail(
       secure: true,
       auth: {
         user: "contact.akshat.jaiswal@gmail.com",
-        pass: "vyhhnbphhwgesbbg",
+        pass: "rhwccxdqkoxfzfnc",
       },
     });
     const emailHtml = render(ResetPasswordEmail({ username, resetPasswordLink}))

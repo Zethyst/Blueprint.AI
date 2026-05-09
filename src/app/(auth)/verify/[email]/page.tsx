@@ -78,8 +78,9 @@ const VerifyAccount: React.FC = () => {
   };
 
   const handleOTPChange = (value: string, index: number) => {
-    let newOTP = { ...OTP};
-    newOTP[index] = value;
+    const digit = value.replace(/\D/g, "").slice(0, 1);
+    let newOTP = { ...OTP };
+    newOTP[index] = digit;
     setOTP(newOTP);
 
     let lastInputIndex = inputs.length - 1;
@@ -210,7 +211,10 @@ const VerifyAccount: React.FC = () => {
                 <input
                   className="rounded-lg h-10 w-10 text-black bg-slate-200 text-center font-semibold custom-input"
                   key={index}
-                  type="text"
+                  type="tel"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="one-time-code"
                   maxLength={1}
                   value={OTP[index]}
                   onChange={(e) => handleOTPChange(e.target.value, index)}

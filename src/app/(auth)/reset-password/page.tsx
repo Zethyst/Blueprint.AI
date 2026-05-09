@@ -57,10 +57,10 @@ export default function Component() {
           id,
           token,
         });
-        toast({
-          title: "Token Verified",
-          description: response.data.message,
-        });
+        // toast({
+        //   title: "Token Verified",
+        //   description: response.data.message,
+        // });
         setBusy(false);
       } catch (error) {
         setBusy(false);

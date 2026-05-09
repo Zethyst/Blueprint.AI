@@ -4,6 +4,7 @@ import UserModel from "@/models/User";
 import createRandomBytes from "@/helpers/randomBytes";
 import { NextRequest, NextResponse } from "next/server";
 import { sendResetPasswordEmail } from "@/helpers/sendResetPasswordEmail";
+import { getAppOrigin } from "@/lib/getAppOrigin";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
     });
     await resetToken.save();
     const username = user.username;
-    const resetPasswordLink = `http://localhost:3000/reset-password?token=${randomToken}&id=${user._id}`
+    const resetPasswordLink = `${getAppOrigin()}/reset-password?token=${randomToken}&id=${user._id}`;
     const emailResponse = await sendResetPasswordEmail(
         username,
         decodedEmail,

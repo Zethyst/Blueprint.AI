@@ -77,27 +77,29 @@ function How() {
       <div className="my-24 space-y-8 flex flex-col justify-center items-center px-5 md:px-32">
         <p
           style={{ fontFamily: " 'Cinzel Variable', serif" }}
-          className="text-3xl md:text-5xl text-center tracking-wider font-medium text-white  font-gradient"
+          className="inline-block text-3xl md:text-5xl text-center tracking-wider font-medium font-gradient"
         >
           How it works
         </p>
-        <div className="flex flex-col justify-start items-start gap-12 w-96 translate-x-2">
+        <div className="flex flex-col justify-start items-start gap-12 w-96 translate-x-2 text-neutral-100 [&_svg]:text-neutral-100">
           <div className="flex flex-col justify-start items-start gap-5">
-            <div className="flex gap-3">
-              <FontAwesomeIcon icon={faInfoCircle} size="xl" />
-              <strong>Describe your project</strong>
+            <div className="flex gap-3 items-start">
+              <FontAwesomeIcon className="shrink-0" icon={faInfoCircle} size="xl" />
+              <strong className="font-semibold text-neutral-50">
+                Describe your project
+              </strong>
             </div>
-            <small>
+            <small className="text-neutral-400 text-[0.9375rem] leading-relaxed font-normal tracking-normal">
               Share the details about what you want your software to do. No
-              worries. We haven't collected any info about your idea.
+              worries. We haven&apos;t collected any info about your idea.
             </small>
           </div>
           <div className="flex flex-col justify-start items-start gap-5">
-            <div className="flex gap-3">
-              <FontAwesomeIcon icon={faChartLine} size="xl" />
-              <strong>Get results</strong>
+            <div className="flex gap-3 items-start">
+              <FontAwesomeIcon className="shrink-0" icon={faChartLine} size="xl" />
+              <strong className="font-semibold text-neutral-50">Get results</strong>
             </div>
-            <small>
+            <small className="text-neutral-400 text-[0.9375rem] leading-relaxed font-normal tracking-normal">
               Our AI tool uses your input to create a comprehensive Software
               Requirements Specification with various features that can set your
               app apart, the most suitable development tool, and a rough
@@ -105,11 +107,11 @@ function How() {
             </small>
           </div>
           <div className="flex flex-col justify-start items-start gap-5">
-            <div className="flex gap-3">
-              <FontAwesomeIcon icon={faEdit} size="xl" />
-              <strong>Edit SRS</strong>
+            <div className="flex gap-3 items-start">
+              <FontAwesomeIcon className="shrink-0" icon={faEdit} size="xl" />
+              <strong className="font-semibold text-neutral-50">Edit SRS</strong>
             </div>
-            <small>
+            <small className="text-neutral-400 text-[0.9375rem] leading-relaxed font-normal tracking-normal">
               You get a draft of the SRS that you can review, edit, and tailor
               to your needs.
             </small>

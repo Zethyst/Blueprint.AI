@@ -91,7 +91,7 @@ function Footer() {
       </div>
       <div className="flex w-full relative justify-center items-center pt-5 tracking-wide">
       <hr className="divider mt-2"/>
-        <p className="text-gray-200 manrope text-center md:text-start translate-y-5 px-5">&copy; 2025 Blueprint.AI - All rights reserved. Designed With  <FontAwesomeIcon className="hover:text-red-600" icon={faHeart} /> By Akshat Jaiswal</p>
+        <p className="text-gray-200 manrope text-center md:text-start translate-y-5 px-5">&copy; 2026 Blueprint.AI - All rights reserved. Designed With  <FontAwesomeIcon className="hover:text-red-600" icon={faHeart} /> By Akshat Jaiswal</p>
       </div>
     </footer>
   );

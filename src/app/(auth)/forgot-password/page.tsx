@@ -56,7 +56,7 @@ export default function Component() {
           <h1 className="my-3 uppercase font-gradient font-extrabold text-3xl w-52 text-center poppins-regular">
             Forgot password
           </h1>
-          <p className="md:text-base text-sm text-center px-3">
+          <p className="md:text-base text-sm text-center px-3 text-gray-500">
             Provide your account's email for which you want to reset your
             password!
           </p>
@@ -79,7 +79,7 @@ export default function Component() {
               </div>
               <button
                 type="submit"
-                className={`btn flex justify-center  items-center gap-3 px-3 text-sm md:text-lg h-12 w-80 md:w-96 rounded-2xl border-none uppercase font-semibold  ${
+                className={`btn flex justify-center  items-center gap-3 px-3 text-sm md:text-lg h-12 w-80 md:w-96 rounded-2xl border-none uppercase font-semibold text-white ${
                   busy ? "opacity-60 pointer-events-none" : ""
                 } bg-black hover:scale-105 transition-all duration-300 `}
               >

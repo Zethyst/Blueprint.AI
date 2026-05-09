@@ -239,6 +239,7 @@ body {
   /* box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2); */
   border: 0 solid #e5e7eb;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 ::selection {
   color: #fff;

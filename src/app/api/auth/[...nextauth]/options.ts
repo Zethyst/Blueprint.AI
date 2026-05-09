@@ -12,88 +12,88 @@ import FacebookProvider from "next-auth/providers/facebook";
 export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
-        clientId: process.env.GITHUB_ID as string,
-        clientSecret: process.env.GITHUB_SECRET as string,
-      }),
-      GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      }),
-      TwitterProvider({
-        clientId: process.env.TWITTER_CLIENT_ID as string,
-        clientSecret: process.env.TWITTER_CLIENT_SECRET as string
-      }),
-      FacebookProvider({
-        clientId: process.env.FACEBOOK_CLIENT_ID as string,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string
-      }),
-      AppleProvider({
-        clientId: process.env.APPLE_ID as string,
-        clientSecret: process.env.APPLE_SECRET as string
-      }),
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string,
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID as string,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+    }),
+    AppleProvider({
+      clientId: process.env.APPLE_ID as string,
+      clientSecret: process.env.APPLE_SECRET as string,
+    }),
     CredentialsProvider({
       id: "credentials",
-      // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        identifier: { label: "Email", type: "email", placeholder: "jsmith@abc.com" },
+        identifier: {
+          label: "Email or Username",
+          type: "text",
+          placeholder: "Enter email or username",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        await dbConnect();
-        try {
-          if (credentials) {
-            
-            const user = await UserModel.findOne({
-              $or: [
-                { username: credentials.identifier },
-                { email: credentials.identifier },
-              ],
-            });
-            if (!user) {
-              throw new Error("No user found with this credential");
-            }
-            if (!user.isVerified) {
-              throw new Error("Please verify your account before login");
-            }
-            
-            const isPasswordCorrect = await bcrypt.compare(
-              credentials.password,
-              user.password
-            );
-            
-            if (isPasswordCorrect) {
-              return user;
-            } else {
-              throw new Error("Incorrect Password");
-            }
-          }
-        } catch (error: any) {
-          throw new Error(error);
+        // Validate credentials exist
+        if (!credentials?.identifier || !credentials?.password) {
+          throw new Error("Please provide email/username and password");
         }
-        const res = await fetch("/your/endpoint", {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
-        });
-        const user = await res.json();
 
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
+        await dbConnect();
+
+        try {
+          // Find user by email or username
+          const user = await UserModel.findOne({
+            $or: [
+              { username: credentials.identifier },
+              { email: credentials.identifier },
+            ],
+          }) as any;
+
+          if (!user) {
+            throw new Error("No user found with this credential");
+          }
+
+          if (!user.isVerified) {
+            throw new Error("Please verify your account before login");
+          }
+
+          // Verify password
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordCorrect) {
+            throw new Error("Incorrect password");
+          }
+
+          // Return user object (will be passed to JWT callback)
+          return {
+            id: user._id.toString(),
+            _id: user._id.toString(),
+            email: user.email,
+            username: user.username,
+            isVerified: user.isVerified,
+          };
+        } catch (error: any) {
+          // Re-throw the error message directly
+          throw new Error(error.message || "Authentication failed");
         }
-        // Return null if user data could not be retrieved
-        return null;
       },
     }),
   ],
   callbacks: {
-    async session({ session, user, token }) {
+    async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
@@ -103,17 +103,23 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user, account }) {
-      await dbConnect();
       if (user) {
         // For OAuth providers (Google, GitHub, etc.)
         if (account && account.type !== "credentials") {
+          await dbConnect();
+          
           // Check if user already exists in MongoDB
           let existingUser = await UserModel.findOne({ email: user.email });
-          
+
           if (!existingUser) {
             // Create new user for OAuth sign-in
+            const username =
+              user.name?.toLowerCase().replace(/\s+/g, "_") ||
+              user.email?.split("@")[0] ||
+              `user_${Date.now()}`;
+
             const newUser = new UserModel({
-              username: user.name?.toLowerCase().replace(/\s+/g, '_') || user.email?.split('@')[0],
+              username,
               email: user.email,
               isVerified: true,
               password: "", // OAuth users don't need password
@@ -121,7 +127,7 @@ export const authOptions: NextAuthOptions = {
             existingUser = await newUser.save();
             console.log("[+] New OAuth user created:", existingUser._id);
           }
-          
+
           // Update token with MongoDB user data
           token._id = existingUser._id?.toString();
           token.isVerified = existingUser.isVerified;

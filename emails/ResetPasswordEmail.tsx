@@ -11,6 +11,7 @@ import {
   Text,
 } from "@react-email/components";
 import * as React from "react";
+import { getAppOrigin } from "@/lib/getAppOrigin";
 
 interface ResetPasswordEmailProps {
   username?: string;
@@ -18,10 +19,6 @@ interface ResetPasswordEmailProps {
   token?:string;
   resetPasswordLink?: string;
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
 
 export const ResetPasswordEmail = ({
   username,
@@ -75,7 +72,7 @@ export const ResetPasswordEmail = ({
 
 ResetPasswordEmail.PreviewProps = {
   username: "Zethyst",
-  resetPasswordLink: "http://localhost:3000/reset-password",
+  resetPasswordLink: `${getAppOrigin()}/reset-password`,
 } as ResetPasswordEmailProps;
 
 export default ResetPasswordEmail;

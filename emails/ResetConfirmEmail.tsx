@@ -12,16 +12,13 @@ import {
     Text,
   } from "@react-email/components";
   import * as React from "react";
-  
+  import { getAppOrigin } from "@/lib/getAppOrigin";
+
   interface ResetPasswordConfirmEmailProps {
     username?: string;
     updatedDate?: Date;
   }
-  
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "";
-  
+
   export const ResetPasswordConfirmEmail = ({
     username,
     updatedDate,
@@ -63,7 +60,7 @@ import {
               </Text>
               <Text style={paragraph}>
                 However if you did NOT perform this password change, please{" "}
-                <Link href="http://localhost:3000/forgot-password" style={link}>
+                <Link href={`${getAppOrigin()}/forgot-password`} style={link}>
                   reset your account password
                 </Link>{" "}
                 immediately.
@@ -87,10 +84,10 @@ import {
           <Section style={footer}>
             <Row>
               <Column align="right" style={{ width: "50%", paddingRight: "8px" }}>
-                <Img src={`${baseUrl}/static/twitch-icon-twitter.png`} />
+                <Img src={`${getAppOrigin()}/static/twitch-icon-twitter.png`} />
               </Column>
               <Column align="left" style={{ width: "50%", paddingLeft: "8px" }}>
-                <Img src={`${baseUrl}/static/twitch-icon-facebook.png`} />
+                <Img src={`${getAppOrigin()}/static/twitch-icon-facebook.png`} />
               </Column>
             </Row>
             <Row>

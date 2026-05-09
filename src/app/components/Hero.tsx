@@ -30,7 +30,7 @@ function Hero() {
           <button
             onClick={() => scrollToSection("generate")}
             style={{ fontFamily: " 'Cinzel Variable', serif" }}
-            className="bg-black px-4 py-2 w-full text-xl font-semibold tracking-wide flex justify-center items-center gap-2"
+            className="bg-black text-white px-4 py-2 w-full text-xl font-semibold tracking-wide flex justify-center items-center gap-2"
           >
             Generate
             <AutoAwesomeIcon />
