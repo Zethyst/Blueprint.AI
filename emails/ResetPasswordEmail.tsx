@@ -39,7 +39,7 @@ export const ResetPasswordEmail = ({
             style={image}
           />
           <Section>
-            <Text style={text}>Hi {username},</Text>
+            <Text style={text}>Hi <strong>{username}</strong>,</Text>
             <Text style={text}>
               Someone recently requested a password change for your Blueprint.AI
               account. If this was you, you can set a new password here:

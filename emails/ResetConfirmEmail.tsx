@@ -52,7 +52,7 @@ import {
               </Row>
             </Section>
             <Section style={content}>
-              <Text style={paragraph}>Hi {username},</Text>
+              <Text style={paragraph}>Hi <strong>{username}</strong>,</Text>
               <Text style={paragraph}>
                 You updated the password for your <strong>Blueprint.AI</strong> account on{" "}
                 {formattedDate}. If this was you, then no further action is
